@@ -6,6 +6,7 @@ set nocompatible                  " Must come first because it changes other opt
 silent! call pathogen#runtime_append_all_bundles()
 
 syntax enable                     " Turn on syntax highlighting.
+filetype on
 filetype plugin indent on         " Turn on file type detection.
 
 runtime macros/matchit.vim        " Load the matchit plugin.
@@ -59,6 +60,11 @@ colorscheme topfunky-light
 " let g:rct_completion_use_fri = 1
 " let g:rct_completion_info_max_len = 20
 set completeopt=menu,preview
+
+let Tlist_Ctags_Cmd = "/usr/bin/ctags"
+let Tlist_WinWidth = 50
+map <F4> :TlistToggle<cr>
+map <F8> :!/usr/bin/ctags -R --exclude=.svn --exclude=.git --exclude=log --exclude=coverage --exclude=*.sql .<CR>
 
 " Tab mappings.
 map <leader>tt :tabnew<cr>
