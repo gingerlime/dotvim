@@ -1,0 +1,113 @@
+Rails:
+	gf : go to file
+
+	yy : copy line
+	p  : baste below
+	p  : page above
+	o  : new empty line
+	O  : new empty line above
+
+	d$ : delete until end of line
+	
+	w  : moving one word
+	w  : moving longer sections
+	b  : moving one word back
+
+	u  : undo
+	strg r : redo
+
+	I  : moves to first non-blank character
+
+	B   b	h move	l   w	W
+
+	0   ^	gE  ge	edge	e   E	$
+
+	    zt
+
+	zz  scroll
+
+	    zb
+
+	    gm
+
+	g0  screen  g$
+
+	:e filename : edit file
+	:set wildmode=list:longest : Active TAB  auto_completion for file paths
+
+	f<string> : find string in line
+	; : repeat it agin
+	, : repeat it the last
+	r<char>   : replace char in cursor
+
+	/ : search forward
+	? : search backward
+	n : next accourancy
+	# : prev current word
+	* : next current word
+	
+	N : previous accourancy
+	:set hlsearch : heighlight accourancies
+	:set incsearch : heighligh accourancies as you type
+
+	:%s/search/replace/gc
+		% : Search the current buffer
+		g : search for all occurrencies
+		c : ask for confirmation on each match
+		i : ignore case
+		I : Case sensitive
+		n : show number of matches (none destructive)
+		i : print matching line
+
+	gg : go to top of page
+	G  : got to end of page
+	
+	Buffers:
+	    :b <name> : switch to buffer
+	    :bp : previous buffer
+	    :bn : next buffer
+	    :bd : delete buffer
+
+	ctrl+carriout : go back to last edit fil
+
+	Tabs:
+	    :tt :tabnew
+	    :te :tabedit
+	    :tc :tabclose
+	    :to :tabonly
+	    :tn :tabnext
+	    :tp :tabprevious
+	    :tf :tabfirst
+	    :tl :tablast
+	    :tm :tabmove
+	:v visual mode
+	:V visual mode, bud marks full lines
+		:y copies selected text
+		:d deletes selected text and copies to clipboard
+		:c delets but jumps than to input mode
+		:o toggles position of cursor
+
+	look what period means ... it does the las command sequence again!!!!!!!!!!!!!!!!!!!
+	install vim-haml plugin !!!!!!!!!!!
+
+	set list : shows tabs and endline charactor
+	set nolist : turns it off
+	set list?
+	set list& : set default
+
+	set softtabstop=2 : sets length of tab (short sts)
+
+	verbose set ... : show the file where the config is set
+	:options : show all aptions
+	:set : shows alls options which don't have their default values
+
+	NERTreee:
+	    ctrl+w w : switch between windows	
+
+	ctrl+t shift ctrl+d
+
+	s = sentence
+	t = tag
+
+	vit = marks content between tags + c to remove and edit
+	vat = marks content with tags
