@@ -17,6 +17,9 @@ set backspace=indent,eol,start    " Intuitive backspacing.
 
 set hidden                        " Handle multiple buffers better.
 
+set tags=./tags;../../tags;
+set grepprg=ack-grep
+
 set wildmenu                      " Enhanced command line completion.
 set wildmode=list:longest         " Complete files like a shell.
 
@@ -52,6 +55,11 @@ set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{fugitive#statusline()}%{exists('*Cap
 " Or use vividchalk
 colorscheme topfunky-light
 
+" rcodetools
+" let g:rct_completion_use_fri = 1
+" let g:rct_completion_info_max_len = 20
+set completeopt=menu,preview
+
 " Tab mappings.
 map <leader>tt :tabnew<cr>
 map <leader>te :tabedit
@@ -62,6 +70,13 @@ map <leader>tp :tabprevious<cr>
 map <leader>tf :tabfirst<cr>
 map <leader>tl :tablast<cr>
 map <leader>tm :tabmove
+
+map <leader>ff :FufFile<cr>
+map <leader>fd :FufDir<cr>
+map <leader>fb :FufBuffer<cr>
+
+map <C-n> :cn
+map <C-p> :cp
 
 " Uncomment to use Jamis Buck's file opening plugin
 "map <Leader>t :FuzzyFinderTextMate<Enter>
