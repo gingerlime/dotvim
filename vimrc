@@ -61,10 +61,10 @@ colorscheme topfunky-light
 " let g:rct_completion_info_max_len = 20
 set completeopt=menu,preview
 
-let Tlist_Ctags_Cmd = "/usr/bin/ctags"
-let Tlist_WinWidth = 50
+let Tlist_Ctags_Cmd = "/usr/bin/ctags-exuberant"
+" let Tlist_WinWidth = 50
 map <F4> :TlistToggle<cr>
-map <F8> :!/usr/bin/ctags -R --exclude=.svn --exclude=.git --exclude=log --exclude=coverage --exclude=*.sql .<CR>
+" map <F8> :!/usr/bin/ctags -R --exclude=.svn --exclude=.git --exclude=log --exclude=coverage --exclude=*.sql .<CR>
 
 " Tab mappings.
 map <leader>tt :tabnew<cr>
@@ -80,6 +80,8 @@ map <leader>tm :tabmove
 map <leader>ff :FufFile<cr>
 map <leader>fd :FufDir<cr>
 map <leader>fb :FufBuffer<cr>
+
+map <leader>ru :TRecentlyUsedFiles<cr>
 
 map <C-n> :cn
 map <C-p> :cp
@@ -101,4 +103,17 @@ map <C-p> :cp
 " For the MakeGreen plugin and Ruby RSpec. Uncomment to use.
 autocmd BufNewFile,BufRead *_spec.rb compiler rspec
 
+au BufRead,BufNewFile *.django.html set filetype=htmldjango
+au BufRead,BufNewFile *.dj.html set filetype=htmldjango
+" autocmd FileType python set ft=python.django " For SnipMate
+au BufRead,BufNewFile *.dj.html set ft=htmldjango.html " For SnipMate
+au BufRead,BufNewFile *.django.html set ft=htmldjango.html " For SnipMate
+
+" tab configs for python
+autocmd FileType python set set tabstop=4
+autocmd FileType python set set shiftwidth=4
+autocmd FileType python set set expandtab
+
+autocmd FileType html set set tabstop=2
+autocmd FileType html set set shiftwidth=2
 
