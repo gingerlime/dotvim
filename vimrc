@@ -51,7 +51,7 @@ set directory=$HOME/.vim/tmp//,.  " Keep swap files in one location
 
 set laststatus=2                  " Show the status line all the time
 " Useful status information at bottom of screen
-set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{fugitive#statusline()}%{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
+" set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{fugitive#statusline()}%{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
 
 " Or use vividchalk
 colorscheme topfunky-light
@@ -109,11 +109,15 @@ au BufRead,BufNewFile *.dj.html set filetype=htmldjango
 au BufRead,BufNewFile *.dj.html set ft=htmldjango.html " For SnipMate
 au BufRead,BufNewFile *.django.html set ft=htmldjango.html " For SnipMate
 
-" tab configs for python
-autocmd FileType python set set tabstop=4
-autocmd FileType python set set shiftwidth=4
-autocmd FileType python set set expandtab
+" keywords for ruby
+" autocmd FileType ruby set iskeyword=@,48-57,_,?,!,192-255
 
-autocmd FileType html set set tabstop=2
-autocmd FileType html set set shiftwidth=2
+" tab configs for python
+autocmd FileType python set tabstop=4
+autocmd FileType python set shiftwidth=4
+autocmd FileType python set expandtab
+
+autocmd FileType html set tabstop=2
+autocmd FileType html set shiftwidth=2
+
 
