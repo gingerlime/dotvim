@@ -110,10 +110,10 @@ au BufRead,BufNewFile *.dj.html set ft=htmldjango.html " For SnipMate
 au BufRead,BufNewFile *.django.html set ft=htmldjango.html " For SnipMate
 
 " tab configs for python
-autocmd FileType python set set tabstop=4
-autocmd FileType python set set shiftwidth=4
-autocmd FileType python set set expandtab
+autocmd FileType python set tabstop=4
+autocmd FileType python set shiftwidth=4
+autocmd FileType python set expandtab
 
-autocmd FileType html set set tabstop=2
-autocmd FileType html set set shiftwidth=2
+autocmd FileType html set tabstop=2
+autocmd FileType html set shiftwidth=2
 
