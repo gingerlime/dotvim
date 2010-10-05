@@ -120,3 +120,9 @@ autocmd FileType python set expandtab
 autocmd FileType html set tabstop=2
 autocmd FileType html set shiftwidth=2
 
+" ragtag
+inoremap <M-o> <Esc>o
+inoremap <C-j> <Down>
+let g:ragtag_global_maps = 1
+
+
