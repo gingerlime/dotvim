@@ -28,6 +28,9 @@ set ignorecase                    " Case-insensitive searching.
 set smartcase                     " But case-sensitive if expression contains a capital letter.
 
 set number                        " Show line numbers.
+"Toggle line numbers and fold column for easy copying:
+nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
+
 set ruler                         " Show cursor position.
 
 set incsearch                     " Highlight matches as you type.
@@ -117,6 +120,8 @@ autocmd FileType python set tabstop=4
 autocmd FileType python set shiftwidth=4
 autocmd FileType python set expandtab
 
+let g:pydiction_location = '/home/johannes/.vim/sources/pydiction-1.2/complete-dict'
+
 autocmd FileType html set tabstop=2
 autocmd FileType html set shiftwidth=2
 
@@ -124,5 +129,4 @@ autocmd FileType html set shiftwidth=2
 inoremap <M-o> <Esc>o
 inoremap <C-j> <Down>
 let g:ragtag_global_maps = 1
-
 
