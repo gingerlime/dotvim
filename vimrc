@@ -112,6 +112,13 @@ au BufRead,BufNewFile *.dj.html set filetype=htmldjango
 au BufRead,BufNewFile *.dj.html set ft=htmldjango.html " For SnipMate
 au BufRead,BufNewFile *.django.html set ft=htmldjango.html " For SnipMate
 
+" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+au BufRead,BufNewFile *.html set filetype=htmldjango
+au BufRead,BufNewFile *.inc set filetype=htmldjango
+" !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+au BufRead,BufNewFile *.js set filetype=javascript
+
 " keywords for ruby
 " autocmd FileType ruby set iskeyword=@,48-57,_,?,!,192-255
 
@@ -122,8 +129,15 @@ autocmd FileType python set expandtab
 
 let g:pydiction_location = '/home/johannes/.vim/sources/pydiction-1.2/complete-dict'
 
-autocmd FileType html set tabstop=2
-autocmd FileType html set shiftwidth=2
+autocmd FileType html set tabstop=4
+autocmd FileType html set shiftwidth=4
+
+autocmd FileType htmldjango set tabstop=4
+autocmd FileType htmldjango set shiftwidth=4
+
+
+autocmd FileType javascript set tabstop=4
+autocmd FileType javascript set shiftwidth=4
 
 " ragtag
 inoremap <M-o> <Esc>o
