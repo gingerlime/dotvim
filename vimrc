@@ -19,7 +19,7 @@ set backspace=indent,eol,start    " Intuitive backspacing.
 set hidden                        " Handle multiple buffers better.
 
 set tags=./tags;../../tags;
-set grepprg=ack-grep
+let g:ackprg="ack-grep -H --nocolor --nogroup --column"
 
 set wildmenu                      " Enhanced command line completion.
 set wildmode=list:longest         " Complete files like a shell.

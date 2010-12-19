@@ -1,1 +1,3 @@
---ignore-dir=rails
+-R
+--type-add
+html=.inc
