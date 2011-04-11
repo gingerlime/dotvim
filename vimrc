@@ -57,7 +57,9 @@ set laststatus=2                  " Show the status line all the time
 " set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{fugitive#statusline()}%{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
 
 " Or use vividchalk
-colorscheme topfunky-light
+" colorscheme topfunky-light
+set t_Co=256
+color wombat256mod
 
 " rcodetools
 " let g:rct_completion_use_fri = 1
@@ -119,6 +121,9 @@ au BufRead,BufNewFile *.inc set filetype=htmldjango
 
 au BufRead,BufNewFile *.js set filetype=javascript
 
+setlocal omnifunc=syntaxcomplete#Complete
+set cot+=menuone
+
 " keywords for ruby
 " autocmd FileType ruby set iskeyword=@,48-57,_,?,!,192-255
 
@@ -126,6 +131,8 @@ au BufRead,BufNewFile *.js set filetype=javascript
 autocmd FileType python set tabstop=4
 autocmd FileType python set shiftwidth=4
 autocmd FileType python set expandtab
+autocmd FileType python compiler pylint
+let g:pylint_onwrite = 0
 
 let g:pydiction_location = '/home/johannes/.vim/sources/pydiction-1.2/complete-dict'
 
@@ -143,4 +150,6 @@ autocmd FileType javascript set shiftwidth=4
 inoremap <M-o> <Esc>o
 inoremap <C-j> <Down>
 let g:ragtag_global_maps = 1
+
+let g:pyflakes_use_quickfix = 0
 
