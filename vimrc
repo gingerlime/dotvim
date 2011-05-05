@@ -57,9 +57,9 @@ set laststatus=2                  " Show the status line all the time
 " set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{fugitive#statusline()}%{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
 
 " Or use vividchalk
-" colorscheme topfunky-light
-set t_Co=256
-color wombat256mod
+colorscheme topfunky-light
+" set t_Co=256
+" color wombat
 
 " rcodetools
 " let g:rct_completion_use_fri = 1
@@ -153,3 +153,13 @@ let g:ragtag_global_maps = 1
 
 let g:pyflakes_use_quickfix = 0
 
+"if has("gui_running")
+	 highlight SpellBad term=underline gui=undercurl guisp=Orange 
+"endif
+ 
+" CTRL+Space for auto-complete
+inoremap <Nul> <C-n>
+" F6 to cycle through documents (next buffer)
+nnoremap <F6> :bn<CR>
+" text wrapping
+set formatoptions=cq textwidth=120 foldignore= wildignore+=*.py[co]
