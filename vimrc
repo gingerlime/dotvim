@@ -48,9 +48,9 @@ set nowritebackup                 " And again.
 set directory=$HOME/.vim/tmp//,.  " Keep swap files in one location
 
 " UNCOMMENT TO USE
-"set tabstop=2                    " Global tab width.
-"set shiftwidth=2                 " And again, related.
-"set expandtab                    " Use spaces instead of tabs
+set tabstop=4                    " Global tab width.
+set shiftwidth=4                 " And again, related.
+set expandtab                    " Use spaces instead of tabs
 
 set laststatus=2                  " Show the status line all the time
 " Useful status information at bottom of screen
@@ -85,6 +85,7 @@ map <leader>tm :tabmove
 map <leader>ff :FufFile<cr>
 map <leader>fd :FufDir<cr>
 map <leader>fb :FufBuffer<cr>
+map <leader>bf :call g:Jsbeautify()<cr>
 
 map <leader>ru :TRecentlyUsedFiles<cr>
 
@@ -146,6 +147,10 @@ autocmd FileType htmldjango set shiftwidth=4
 autocmd FileType javascript set tabstop=4
 autocmd FileType javascript set shiftwidth=4
 
+autocmd FileType php set tabstop=4
+autocmd FileType php set shiftwidth=4
+autocmd FileType php set expandtab
+
 " ragtag
 inoremap <M-o> <Esc>o
 inoremap <C-j> <Down>
@@ -161,5 +166,11 @@ let g:pyflakes_use_quickfix = 0
 inoremap <Nul> <C-n>
 " F6 to cycle through documents (next buffer)
 nnoremap <F6> :bn<CR>
+" F8 to toggle indent off
+nnoremap <F8> :setl noai nocin nosi inde=<CR>
 " text wrapping
 set formatoptions=cq textwidth=120 foldignore= wildignore+=*.py[co]
+
+
+" vimpress
+let VIMPRESS = [{'username':'','blog_url':''}]
