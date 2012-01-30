@@ -171,6 +171,8 @@ nnoremap <F8> :setl noai nocin nosi inde=<CR>
 " text wrapping
 set formatoptions=cq textwidth=120 foldignore= wildignore+=*.py[co]
 
+"autocmd FileType python map <buffer> <F3> :call Pep8()<CR>
+let no_pep8_maps = 1
 
 " vimpress
-let VIMPRESS = [{'username':'','blog_url':''}]
+let VIMPRESS = [{'username':'','password':'','blog_url':''}]
