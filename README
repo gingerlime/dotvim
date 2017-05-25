@@ -1,0 +1,7 @@
+## .vim configs
+
+## Usage
+
+* `mkdir -p ~/.vim`
+* Copy folder to `~/.vim/`
+* Copy `vimrc` to `~/.vimrc`
