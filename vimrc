@@ -6,6 +6,7 @@ set nocompatible                  " Must come first because it changes other opt
 silent! call pathogen#runtime_append_all_bundles()
 
 syntax enable                     " Turn on syntax highlighting.
+filetype off
 filetype on
 filetype plugin indent on         " Turn on file type detection.
 
@@ -56,9 +57,21 @@ set laststatus=2                  " Show the status line all the time
 " Useful status information at bottom of screen
 " set statusline=[%n]\ %<%.99f\ %h%w%m%r%y\ %{fugitive#statusline()}%{exists('*CapsLockStatusline')?CapsLockStatusline():''}%=%-16(\ %l,%c-%v\ %)%P
 
-" Or use vividchalk
-colorscheme topfunky-light
-" set t_Co=256
+""""""""""""""
+" tmux fixes "
+""""""""""""""
+" Handle tmux $TERM quirks in vim
+if $TERM =~ '^screen-256color'
+    map <Esc>OH <Home>
+    map! <Esc>OH <Home>
+    map <Esc>OF <End>
+    map! <Esc>OF <End>
+endif
+set t_Co=256
+let g:solarized_termcolors=256
+"let g:solarized_termtrans = 1
+set background=dark
+colorscheme solarized "desert topfunky-light
 " color wombat
 
 " rcodetools
@@ -143,6 +156,9 @@ autocmd FileType html set shiftwidth=4
 autocmd FileType htmldjango set tabstop=4
 autocmd FileType htmldjango set shiftwidth=4
 
+autocmd FileType ruby set tabstop=2
+autocmd FileType ruby set shiftwidth=2
+autocmd FileType ruby set expandtab
 
 autocmd FileType javascript set tabstop=4
 autocmd FileType javascript set shiftwidth=4
@@ -166,13 +182,113 @@ let g:pyflakes_use_quickfix = 0
 inoremap <Nul> <C-n>
 " F6 to cycle through documents (next buffer)
 nnoremap <F6> :bn<CR>
+" F7 to delete the buffer
+nnoremap <F7> :bd<CR>
 " F8 to toggle indent off
 nnoremap <F8> :setl noai nocin nosi inde=<CR>
 " text wrapping
 set formatoptions=cq textwidth=120 foldignore= wildignore+=*.py[co]
 
+""" UNITE
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#sorter_default#use(['sorter_rank'])
+" Set up some custom ignores
+call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
+      \ 'ignore_pattern', join([
+      \ '\.git/',
+      \ 'tmp/',
+      \ 'public/assets/',
+      \ 'public/javascripts/',
+      \ '\.png$',
+      \ '\.jpg$',
+      \ '\.gif$',
+      \ '\.log$',
+      \ ], '\|'))
+
+call unite#set_profile('files', 'context.smartcase', 1)
+call unite#custom#source('line,outline','matchers','matcher_fuzzy')
+let g:unite_data_directory='~/.vim/.cache/unite'
+" let g:unite_enable_start_insert=1
+let g:unite_source_history_yank_enable=1
+let g:unite_source_rec_max_cache_files=5000
+let g:unite_prompt='» '
+
+" For ack.
+if executable('ack-grep')
+  let g:unite_source_grep_command = 'ack-grep'
+  " Match whole word only. This might/might not be a good idea
+  let g:unite_source_grep_default_opts = '--no-heading --no-color'
+  let g:unite_source_grep_recursive_opt = ''
+elseif executable('ack')
+  let g:unite_source_grep_command = 'ack'
+  let g:unite_source_grep_default_opts = '--no-heading --no-color'
+  let g:unite_source_grep_recursive_opt = ''
+endif
+
+function! s:unite_settings()
+  nmap <buffer> Q <plug>(unite_exit)
+  nmap <buffer> <esc> <plug>(unite_exit)
+  imap <buffer> <esc> <plug>(unite_exit)
+endfunction
+autocmd FileType unite call s:unite_settings()
+
+nmap <space> [unite]
+nnoremap [unite] <nop>
+
+nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async buffer file_mru bookmark<cr><c-u>
+nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async<cr><c-u>
+
+nnoremap <C-e> :Unite -no-split -start-insert file_rec<cr>
+nnoremap <silent> [unite]b :<C-u>Unite -start-insert -auto-resize -buffer-name=buffers buffer<cr>
+nnoremap <silent> [unite]s :Unite -buffer-name=buffers -auto-resize -quick-match buffer<cr>
+nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<cr>
+nnoremap <silent> [unite]l :<C-u>Unite -start-insert -no-split -auto-resize -buffer-name=line line<cr>
+nnoremap <silent> [unite]m :Unite -no-split -buffer-name=mru -start-insert file_mru<cr>
+nnoremap <silent> [unite][ :Unite -start-insert -auto-resize -buffer-name=outline outline<cr>
+" nnoremap <silent> [unite]/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
+nnoremap <silent> [unite]/ :<C-u>Unite -no-split -buffer-name=search grep:.<cr>
+
 "autocmd FileType python map <buffer> <F3> :call Pep8()<CR>
 let no_pep8_maps = 1
 
+"airline
+let g:airline_theme='badwolf'
+" let g:airline_left_sep = '»'
+let g:airline_left_sep=''
+let g:airline_right_sep=''
+let g:airline_fugitive_prefix = '⎇ '
+let g:airline_detect_paste=1
+let g:airline#extensions#tabline#fnametruncate=10
+let g:airline#extensions#branch#displayed_head_limit=10
+
 " vimpress
-let VIMPRESS = [{'username':'','password':'','blog_url':''}]
+let VIMPRESS = [{'username':'','blog_url':''}]
+let g:slime_target = "tmux"
+
+" Quote a word consisting of letters from iskeyword.
+nnoremap <silent> qw :call Quote('"')<CR>
+nnoremap <silent> qs :call Quote("'")<CR>
+nnoremap <silent> wq :call UnQuote()<CR>
+function! Quote(quote)
+  normal mz
+  exe 's/\(\k*\%#\k*\)/' . a:quote . '\1' . a:quote . '/'
+  normal `zl
+endfunction
+
+function! UnQuote()
+  normal mz
+  exe 's/["' . "'" . ']\(\k*\%#\k*\)[' . "'" . '"]/\1/'
+  normal `z
+endfunction
+
+" for coffeescript
+au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
+
+" vim-sneak with easymotion
+nmap s <Plug>(easymotion-overwin-f2)
+map  / <Plug>(easymotion-sn)
+omap / <Plug>(easymotion-tn)
+map  n <Plug>(easymotion-next)
+
+" let g:ctrlp_map = '<c-e>'
+" let g:ctrlp_cmd = 'CtrlP'
