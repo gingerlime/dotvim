@@ -107,7 +107,7 @@ except ImportError:
                 raise VimPressException("The package python-markdown is required and is either not present or not properly installed.")
         markdown = markdown_stub()
 
-markdown_options = {'extensions': ['nl2br', 'extra']}
+markdown_options = {'extensions': []} #['nl2br', 'extra']}
 image_template = '<a href="%(url)s"><img title="%(file)s" alt="%(file)s" src="%(url)s" class="aligncenter" /></a>'
 blog_username = None
 blog_password = None
