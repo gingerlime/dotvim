@@ -9,6 +9,30 @@ call plug#begin('~/.vim/plugged')
 if has('nvim')
   Plug 'Shougo/denite.nvim'
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+  Plug 'sheerun/vim-polyglot'
+  Plug 'airblade/vim-gitgutter'
+  Plug 'bfredl/nvim-miniyank'
+  Plug 'easymotion/vim-easymotion'
+  Plug 'nvie/vim-flake8'
+  Plug 'neomake/neomake'
+  Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-rails'
+  Plug 'tpope/vim-ragtag'
+  Plug 'tpope/vim-endwise'
+  Plug 'tpope/vim-commentary'
+  Plug 'vim-scripts/gitignore'
+  Plug 'altercation/vim-colors-solarized'
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+  Plug 'terryma/vim-multiple-cursors'
+  Plug 'bronson/vim-trailing-whitespace'
+  " Plug 'kchmck/vim-coffee-script'
+
+  " Plug 'justinmk/vim-sneak'
+  " Plug 'Shougo/neoyank.vim'
+  "Plug 'wincent/terminus'
+  "
   " Plug 'autozimu/LanguageClient-neovim', {
   "       \\ 'branch': 'next',
   "       \\ 'do': 'bash install.sh',
@@ -31,7 +55,7 @@ set backspace=indent,eol,start    " Intuitive backspacing.
 set hidden                        " Handle multiple buffers better.
 
 set tags=./tags;../../tags;
-let g:ackprg="ack-grep -H --nocolor --nogroup --column"
+let g:ackprg="rg -H --no-heading --column"
 
 set wildmenu                      " Enhanced command line completion.
 set wildmode=list:longest         " Complete files like a shell.
@@ -156,10 +180,10 @@ set cot+=menuone
 autocmd FileType python set tabstop=4
 autocmd FileType python set shiftwidth=4
 autocmd FileType python set expandtab
-autocmd FileType python compiler pylint
-let g:pylint_onwrite = 0
-
-let g:pydiction_location = '/home/johannes/.vim/sources/pydiction-1.2/complete-dict'
+" autocmd FileType python compiler pylint
+" let g:pylint_onwrite = 0
+" 
+" let g:pydiction_location = '/home/johannes/.vim/sources/pydiction-1.2/complete-dict'
 
 autocmd FileType html set tabstop=4
 autocmd FileType html set shiftwidth=4
@@ -274,7 +298,8 @@ let g:airline_detect_paste=1
 let g:airline#extensions#tabline#fnametruncate=10
 let g:airline#extensions#branch#displayed_head_limit=10
 
-" vimpress
+"let g:deoplete#enable_at_startup = 1
+
 let VIMPRESS = [{'username':'','blog_url':''}]
 let g:slime_target = "tmux"
 
@@ -299,9 +324,9 @@ au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
 
 " vim-sneak with easymotion
 nmap s <Plug>(easymotion-overwin-f2)
-map  / <Plug>(easymotion-sn)
-omap / <Plug>(easymotion-tn)
-map  n <Plug>(easymotion-next)
+" map  / <Plug>(easymotion-sn)
+" omap / <Plug>(easymotion-tn)
+" map  n <Plug>(easymotion-next)
 
 " let g:ctrlp_map = '<c-e>'
 " let g:ctrlp_cmd = 'CtrlP'
@@ -316,50 +341,79 @@ if has('nvim')
           \'winheight', winheight(0) / 2)
   augroup end
 
+  " Define mappings
+  autocmd FileType denite call s:denite_my_settings()
+  function! s:denite_my_settings() abort
+    nnoremap <silent><buffer><expr> <CR>
+    \ denite#do_map('do_action')
+    nnoremap <silent><buffer><expr> d
+    \ denite#do_map('do_action', 'delete')
+    nnoremap <silent><buffer><expr> p
+    \ denite#do_map('do_action', 'preview')
+    nnoremap <silent><buffer><expr> q
+    \ denite#do_map('quit')
+    nnoremap <silent><buffer><expr> i
+    \ denite#do_map('open_filter_buffer')
+    nnoremap <silent><buffer><expr> <Space>
+    \ denite#do_map('toggle_select').'j'
+  endfunction
+
+  autocmd FileType denite-filter call s:denite_filter_my_settings()
+  function! s:denite_filter_my_settings() abort
+    imap <silent><buffer> <C-o> <Plug>(denite_filter_quit)
+  endfunction
+
   call denite#custom#option('default', {
         \ 'prompt': '❯'
         \ })
 
-  call denite#custom#var('file_rec', 'command',
-        \ ['rg', '--files', '--glob', '!.git', ''])
+  call denite#custom#var('file/rec', 'command',
+        \ ['rg', '--files', '--glob', '!.git'])
   call denite#custom#var('grep', 'command', ['rg'])
   call denite#custom#var('grep', 'default_opts',
-        \ ['--hidden', '--vimgrep', '--no-heading', '-S'])
+        \ ['--hidden', '--vimgrep', '--no-heading', '-S', '-g', '!public/cache/*'])
   call denite#custom#var('grep', 'recursive_opts', [])
   call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
   call denite#custom#var('grep', 'separator', ['--'])
   call denite#custom#var('grep', 'final_opts', [])
-  call denite#custom#map('insert', '<Esc>', '<denite:enter_mode:normal>',
-        \'noremap')
-  call denite#custom#map('normal', '<Esc>', '<NOP>',
-        \'noremap')
-  call denite#custom#map('insert', '<C-v>', '<denite:do_action:vsplit>',
-        \'noremap')
-  call denite#custom#map('normal', '<C-v>', '<denite:do_action:vsplit>',
-        \'noremap')
-  call denite#custom#map('normal', 'dw', '<denite:delete_word_after_caret>',
-        \'noremap')
+  " call denite#custom#map('insert', '<Esc>', '<denite:enter_mode:normal>',
+  "       \'noremap')
+  " call denite#custom#map('normal', '<Esc>', '<NOP>',
+  "       \'noremap')
+  " call denite#custom#map('insert', '<C-v>', '<denite:do_action:vsplit>',
+  "       \'noremap')
+  " call denite#custom#map('normal', '<C-v>', '<denite:do_action:vsplit>',
+  "       \'noremap')
+  " call denite#custom#map('normal', 'dw', '<denite:delete_word_after_caret>',
+  "      \'noremap')
 
-  call denite#custom#map('normal', '<Down>', '<denite:move_to_next_line>', 'noremap')
-  call denite#custom#map('normal', '<Up>', '<denite:move_to_previous_line>', 'noremap')
-  call denite#custom#map('insert', '<Down>', '<denite:move_to_next_line>', 'noremap')
-  call denite#custom#map('insert', '<Up>', '<denite:move_to_previous_line>', 'noremap')
-  call denite#custom#map('insert', '<C-Down>', '<denite:move_to_next_line>', 'noremap')
-  call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>', 'noremap')
-  call denite#custom#map('insert', '<C-Up>', '<denite:move_to_previous_line>', 'noremap')
-  call denite#custom#map('insert', '<C-p>', '<denite:move_to_previous_line>', 'noremap')
-  call denite#custom#map('insert', '<PageDown>', '<denite:scroll_page_forwards>', 'noremap')
-  call denite#custom#map('normal', '<PageDown>', '<denite:scroll_page_forwards>', 'noremap')
-  call denite#custom#map('insert', '<PageUp>', '<denite:scroll_page_backwards>', 'noremap')
-  call denite#custom#map('normal', '<PageUp>', '<denite:scroll_page_backwards>', 'noremap')
+  " call denite#custom#map('normal', '<Down>', '<denite:move_to_next_line>', 'noremap')
+  " call denite#custom#map('normal', '<Up>', '<denite:move_to_previous_line>', 'noremap')
+  " call denite#custom#map('insert', '<Down>', '<denite:move_to_next_line>', 'noremap')
+  " call denite#custom#map('insert', '<Up>', '<denite:move_to_previous_line>', 'noremap')
+  " call denite#custom#map('insert', '<C-Down>', '<denite:move_to_next_line>', 'noremap')
+  " call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>', 'noremap')
+  " call denite#custom#map('insert', '<C-Up>', '<denite:move_to_previous_line>', 'noremap')
+  " " call denite#custom#map('insert', '<C-p>', '<denite:move_to_previous_line>', 'noremap')
+  " call denite#custom#map('insert', '<PageDown>', '<denite:scroll_page_forwards>', 'noremap')
+  " call denite#custom#map('normal', '<PageDown>', '<denite:scroll_page_forwards>', 'noremap')
+  " call denite#custom#map('insert', '<PageUp>', '<denite:scroll_page_backwards>', 'noremap')
+  " call denite#custom#map('normal', '<PageUp>', '<denite:scroll_page_backwards>', 'noremap')
 endif
 
-nnoremap <C-e> :Denite file_rec<CR>
+map p <Plug>(miniyank-autoput)
+map P <Plug>(miniyank-autoPut)
+map <C-p> <Plug>(miniyank-cycle)
+nnoremap <leader>p :Denite miniyank<CR>
+
+" nnoremap <C-e> :Denite file_rec<CR>
+nnoremap <C-e> :Denite file/rec<CR>
 nnoremap <Space>b :<C-u>Denite buffer<CR>
 nnoremap <leader><Space>s :<C-u>DeniteBufferDir buffer<CR>
-nnoremap <leader>8 :<C-u>DeniteCursorWord grep:. -mode=normal<CR>
-nnoremap <Space>/ :<C-u>Denite grep:. -mode=normal<CR>
-nnoremap <leader><Space>/ :<C-u>DeniteBufferDir grep:. -mode=normal<CR>
+nnoremap <leader>8 :<C-u>DeniteCursorWord grep:.<CR>
+" nnoremap <Space>/ :<C-u>Denite grep:. -mode=normal<CR>
+nnoremap <Space>/ :<C-u>Denite grep:.<CR>
+nnoremap <leader><Space>/ :<C-u>DeniteBufferDir grep:.<CR>
 nnoremap <leader>d :<C-u>DeniteBufferDir file_rec<CR>
 
 " nnoremap <PageDown> <c-f>
@@ -369,6 +423,27 @@ hi link deniteMatchedChar Special
 
 " denite-extra
 
-nnoremap <leader>o :<C-u>Denite location_list -mode=normal -no-empty<CR>
-nnoremap <leader>hs :<C-u>Denite history:search -mode=normal<CR>
-nnoremap <leader>hc :<C-u>Denite history:cmd -mode=normal<CR>
+" nnoremap <leader>o :<C-u>Denite location_list -no-empty<CR>
+" nnoremap <leader>hs :<C-u>Denite history:search<CR>
+" nnoremap <leader>hc :<C-u>Denite history:cmd<CR>
+
+set clipboard+=unnamedplus
+set inccommand=nosplit
+
+set updatetime=100
+
+" infinite undo
+set undofile
+set undodir=~/.vim/undodir
+" https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
+set nomodeline
+
+" Neomake rubocop via docker (kenhub)
+let g:neomake_ruby_rubocop_maker = neomake#makers#ft#ruby#rubocop()
+let g:neomake_ruby_rubocop_exe = 'docker-compose'
+let g:neomake_ruby_rubocop_args = ['exec', '-T', 'web', 'bundle', 'exec', 'rubocop', '--stdin', '%'] + neomake#makers#ft#ruby#rubocop().args
+let g:neomake_ruby_rubocop_uses_stdin = 1
+let g:neomake_ruby_rubocop_uses_filename = 1
+let g:neomake_ruby_rubocop_append_file = 0
+"let g:neomake_logfile = '/tmp/neomake.log'
+call neomake#configure#automake('nrwi', 500)
