@@ -5,6 +5,17 @@ set nocompatible                  " Must come first because it changes other opt
 
 silent! call pathogen#runtime_append_all_bundles()
 
+call plug#begin('~/.vim/plugged')
+if has('nvim')
+  Plug 'Shougo/denite.nvim'
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  " Plug 'autozimu/LanguageClient-neovim', {
+  "       \\ 'branch': 'next',
+  "       \\ 'do': 'bash install.sh',
+  "       \\ }
+endif
+call plug#end()
+
 syntax enable                     " Turn on syntax highlighting.
 filetype off
 filetype on
@@ -102,8 +113,8 @@ map <leader>bf :call g:Jsbeautify()<cr>
 
 map <leader>ru :TRecentlyUsedFiles<cr>
 
-map <C-n> :cn
-map <C-p> :cp
+"map <C-n> :cn
+"map <C-p> :cp
 
 " Uncomment to use Jamis Buck's file opening plugin
 "map <Leader>t :FuzzyFinderTextMate<Enter>
@@ -179,7 +190,8 @@ let g:pyflakes_use_quickfix = 0
 "endif
  
 " CTRL+Space for auto-complete
-inoremap <Nul> <C-n>
+"inoremap <Nul> <C-n>
+inoremap <C-space> <C-n>
 " F6 to cycle through documents (next buffer)
 nnoremap <F6> :bn<CR>
 " F7 to delete the buffer
@@ -189,64 +201,65 @@ nnoremap <F8> :setl noai nocin nosi inde=<CR>
 " text wrapping
 set formatoptions=cq textwidth=120 foldignore= wildignore+=*.py[co]
 
-""" UNITE
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#filters#sorter_default#use(['sorter_rank'])
-" Set up some custom ignores
-call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
-      \ 'ignore_pattern', join([
-      \ '\.git/',
-      \ 'tmp/',
-      \ 'public/assets/',
-      \ 'public/javascripts/',
-      \ '\.png$',
-      \ '\.jpg$',
-      \ '\.gif$',
-      \ '\.log$',
-      \ ], '\|'))
-
-call unite#set_profile('files', 'context.smartcase', 1)
-call unite#custom#source('line,outline','matchers','matcher_fuzzy')
-let g:unite_data_directory='~/.vim/.cache/unite'
-" let g:unite_enable_start_insert=1
-let g:unite_source_history_yank_enable=1
-let g:unite_source_rec_max_cache_files=5000
-let g:unite_prompt='» '
-
-" For ack.
-if executable('ack-grep')
-  let g:unite_source_grep_command = 'ack-grep'
-  " Match whole word only. This might/might not be a good idea
-  let g:unite_source_grep_default_opts = '--no-heading --no-color'
-  let g:unite_source_grep_recursive_opt = ''
-elseif executable('ack')
-  let g:unite_source_grep_command = 'ack'
-  let g:unite_source_grep_default_opts = '--no-heading --no-color'
-  let g:unite_source_grep_recursive_opt = ''
-endif
-
-function! s:unite_settings()
-  nmap <buffer> Q <plug>(unite_exit)
-  nmap <buffer> <esc> <plug>(unite_exit)
-  imap <buffer> <esc> <plug>(unite_exit)
-endfunction
-autocmd FileType unite call s:unite_settings()
-
-nmap <space> [unite]
-nnoremap [unite] <nop>
-
-nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async buffer file_mru bookmark<cr><c-u>
-nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async<cr><c-u>
-
-nnoremap <C-e> :Unite -no-split -start-insert file_rec<cr>
-nnoremap <silent> [unite]b :<C-u>Unite -start-insert -auto-resize -buffer-name=buffers buffer<cr>
-nnoremap <silent> [unite]s :Unite -buffer-name=buffers -auto-resize -quick-match buffer<cr>
-nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<cr>
-nnoremap <silent> [unite]l :<C-u>Unite -start-insert -no-split -auto-resize -buffer-name=line line<cr>
-nnoremap <silent> [unite]m :Unite -no-split -buffer-name=mru -start-insert file_mru<cr>
-nnoremap <silent> [unite][ :Unite -start-insert -auto-resize -buffer-name=outline outline<cr>
-" nnoremap <silent> [unite]/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
-nnoremap <silent> [unite]/ :<C-u>Unite -no-split -buffer-name=search grep:.<cr>
+" """ UNITE
+" call unite#filters#matcher_default#use(['matcher_fuzzy'])
+" call unite#filters#sorter_default#use(['sorter_rank'])
+" " Set up some custom ignores
+" call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
+"       \\ 'ignore_pattern', join([
+"       \\ '\\.git/',
+"       \\ 'tmp/',
+"       \\ 'log/',
+"       \\ 'public/assets/',
+"       \\ 'public/javascripts/',
+"       \\ '\\.png$',
+"       \\ '\\.jpg$',
+"       \\ '\\.gif$',
+"       \\ '\\.log$',
+"       \\ ], '\\|'))
+" 
+" call unite#set_profile('files', 'context.smartcase', 1)
+" call unite#custom#source('line,outline','matchers','matcher_fuzzy')
+" let g:unite_data_directory='~/.vim/.cache/unite'
+" " let g:unite_enable_start_insert=1
+" let g:unite_source_history_yank_enable=1
+" let g:unite_source_rec_max_cache_files=5000
+" let g:unite_prompt='» '
+" 
+" " For ack.
+" if executable('ack-grep')
+"   let g:unite_source_grep_command = 'ack-grep'
+"   " Match whole word only. This might/might not be a good idea
+"   let g:unite_source_grep_default_opts = '--no-heading --no-color'
+"   let g:unite_source_grep_recursive_opt = ''
+" elseif executable('ack')
+"   let g:unite_source_grep_command = 'ack'
+"   let g:unite_source_grep_default_opts = '--no-heading --no-color'
+"   let g:unite_source_grep_recursive_opt = ''
+" endif
+" 
+" function! s:unite_settings()
+"   nmap <buffer> Q <plug>(unite_exit)
+"   nmap <buffer> <esc> <plug>(unite_exit)
+"   imap <buffer> <esc> <plug>(unite_exit)
+" endfunction
+" autocmd FileType unite call s:unite_settings()
+" 
+" nmap <space> [unite]
+" nnoremap [unite] <nop>
+" 
+" nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async buffer file_mru bookmark<cr><c-u>
+" nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async<cr><c-u>
+" 
+" nnoremap <C-e> :Unite -no-split -start-insert file_rec<cr>
+" nnoremap <silent> [unite]b :<C-u>Unite -start-insert -auto-resize -buffer-name=buffers buffer<cr>
+" nnoremap <silent> [unite]s :Unite -buffer-name=buffers -auto-resize -quick-match buffer<cr>
+" nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<cr>
+" nnoremap <silent> [unite]l :<C-u>Unite -start-insert -no-split -auto-resize -buffer-name=line line<cr>
+" nnoremap <silent> [unite]m :Unite -no-split -buffer-name=mru -start-insert file_mru<cr>
+" nnoremap <silent> [unite][ :Unite -start-insert -auto-resize -buffer-name=outline outline<cr>
+" " nnoremap <silent> [unite]/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
+" nnoremap <silent> [unite]/ :<C-u>Unite -no-split -buffer-name=search grep:.<cr>
 
 "autocmd FileType python map <buffer> <F3> :call Pep8()<CR>
 let no_pep8_maps = 1
@@ -292,3 +305,70 @@ map  n <Plug>(easymotion-next)
 
 " let g:ctrlp_map = '<c-e>'
 " let g:ctrlp_cmd = 'CtrlP'
+"
+" denite
+
+if has('nvim')
+  " reset 50% winheight on window resize
+  augroup deniteresize
+    autocmd!
+    autocmd VimResized,VimEnter * call denite#custom#option('default',
+          \'winheight', winheight(0) / 2)
+  augroup end
+
+  call denite#custom#option('default', {
+        \ 'prompt': '❯'
+        \ })
+
+  call denite#custom#var('file_rec', 'command',
+        \ ['rg', '--files', '--glob', '!.git', ''])
+  call denite#custom#var('grep', 'command', ['rg'])
+  call denite#custom#var('grep', 'default_opts',
+        \ ['--hidden', '--vimgrep', '--no-heading', '-S'])
+  call denite#custom#var('grep', 'recursive_opts', [])
+  call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
+  call denite#custom#var('grep', 'separator', ['--'])
+  call denite#custom#var('grep', 'final_opts', [])
+  call denite#custom#map('insert', '<Esc>', '<denite:enter_mode:normal>',
+        \'noremap')
+  call denite#custom#map('normal', '<Esc>', '<NOP>',
+        \'noremap')
+  call denite#custom#map('insert', '<C-v>', '<denite:do_action:vsplit>',
+        \'noremap')
+  call denite#custom#map('normal', '<C-v>', '<denite:do_action:vsplit>',
+        \'noremap')
+  call denite#custom#map('normal', 'dw', '<denite:delete_word_after_caret>',
+        \'noremap')
+
+  call denite#custom#map('normal', '<Down>', '<denite:move_to_next_line>', 'noremap')
+  call denite#custom#map('normal', '<Up>', '<denite:move_to_previous_line>', 'noremap')
+  call denite#custom#map('insert', '<Down>', '<denite:move_to_next_line>', 'noremap')
+  call denite#custom#map('insert', '<Up>', '<denite:move_to_previous_line>', 'noremap')
+  call denite#custom#map('insert', '<C-Down>', '<denite:move_to_next_line>', 'noremap')
+  call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>', 'noremap')
+  call denite#custom#map('insert', '<C-Up>', '<denite:move_to_previous_line>', 'noremap')
+  call denite#custom#map('insert', '<C-p>', '<denite:move_to_previous_line>', 'noremap')
+  call denite#custom#map('insert', '<PageDown>', '<denite:scroll_page_forwards>', 'noremap')
+  call denite#custom#map('normal', '<PageDown>', '<denite:scroll_page_forwards>', 'noremap')
+  call denite#custom#map('insert', '<PageUp>', '<denite:scroll_page_backwards>', 'noremap')
+  call denite#custom#map('normal', '<PageUp>', '<denite:scroll_page_backwards>', 'noremap')
+endif
+
+nnoremap <C-e> :Denite file_rec<CR>
+nnoremap <Space>b :<C-u>Denite buffer<CR>
+nnoremap <leader><Space>s :<C-u>DeniteBufferDir buffer<CR>
+nnoremap <leader>8 :<C-u>DeniteCursorWord grep:. -mode=normal<CR>
+nnoremap <Space>/ :<C-u>Denite grep:. -mode=normal<CR>
+nnoremap <leader><Space>/ :<C-u>DeniteBufferDir grep:. -mode=normal<CR>
+nnoremap <leader>d :<C-u>DeniteBufferDir file_rec<CR>
+
+" nnoremap <PageDown> <c-f>
+" nnoremap <PageUp> <c-b>
+
+hi link deniteMatchedChar Special
+
+" denite-extra
+
+nnoremap <leader>o :<C-u>Denite location_list -mode=normal -no-empty<CR>
+nnoremap <leader>hs :<C-u>Denite history:search -mode=normal<CR>
+nnoremap <leader>hc :<C-u>Denite history:cmd -mode=normal<CR>
