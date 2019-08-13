@@ -407,7 +407,7 @@ map <C-p> <Plug>(miniyank-cycle)
 nnoremap <leader>p :Denite miniyank<CR>
 
 " nnoremap <C-e> :Denite file_rec<CR>
-nnoremap <C-e> :Denite file/rec<CR>
+nnoremap <C-e> :Denite file/rec<CR>:call denite#call_map('open_filter_buffer')<CR>
 nnoremap <Space>b :<C-u>Denite buffer<CR>
 nnoremap <leader><Space>s :<C-u>DeniteBufferDir buffer<CR>
 nnoremap <leader>8 :<C-u>DeniteCursorWord grep:.<CR>
@@ -445,5 +445,10 @@ let g:neomake_ruby_rubocop_args = ['exec', '-T', 'web', 'bundle', 'exec', 'ruboc
 let g:neomake_ruby_rubocop_uses_stdin = 1
 let g:neomake_ruby_rubocop_uses_filename = 1
 let g:neomake_ruby_rubocop_append_file = 0
-"let g:neomake_logfile = '/tmp/neomake.log'
+let g:neomake_haml_hamllint_exe = 'docker-compose'
+let g:neomake_haml_hamllint_args = ['exec', '-T', 'web', 'bundle', 'exec', 'haml-lint'] + neomake#makers#ft#haml#hamllint().args
+" let g:neomake_ruby_rubocop_errorformat = 'xyz'
+" let g:neomake_logfile = '/tmp/neomake.log'
+
+" let g:neomake_ruby_rubocop_maker = {'output_stream': 'stdout', 'postprocess': function('neomake#makers#ft#ruby#RubocopEntryProcess'), 'errorformat': '%f:%l:%c: %t: %m,%E%f:%l: %m', 'args': ['--format', 'emacs', '--force-exclusion', '--display-cop-names'], 'supports_stdin': function('1')}
 call neomake#configure#automake('nrwi', 500)
